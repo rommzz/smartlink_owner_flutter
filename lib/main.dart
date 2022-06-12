@@ -1,8 +1,13 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:smartlink_owner_flutter/webview.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(const MaterialApp(
+      title: 'Smart Owner',
+      home: MyApp(),
+    ));
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -15,24 +20,35 @@ class _MyAppState extends State<MyApp> {
   String email = '';
   String password = '';
 
+  _saveToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
+  }
+
   _submit() async {
     try {
-      Response res;
       var dio = Dio();
-      var data = {
+      var data = FormData.fromMap({
         'email': email,
         'password': password,
-      };
-      res = await dio.post(
-          'https://smartlink-owner-0-gateway-fljnd6wana-de.a.run.app//auth/byemailsign',
-          data: data);
-      // ignore: avoid_print
-      print(data);
+      });
+      Response res = await dio
+          .post('https://owner-api.smartlink.id/auth/byemailsign', data: data);
+      if (res.data['status'] == true) {
+        _saveToken(res.data['data']['token']);
+        // ignore: use_build_context_synchronously
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const WebView()));
+      } else {
+        // ignore: avoid_print
+        print(res.data['msg']);
+      }
     } catch (e) {
-      log('message');
+      log(e as String);
     }
   }
 
+  @override
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,7 +58,7 @@ class _MyAppState extends State<MyApp> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Yuan dodol'),
+          title: const Text('Yuan dodoli'),
         ),
         body: Column(
           children: [
