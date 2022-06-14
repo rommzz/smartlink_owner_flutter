@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:smartlink_owner_flutter/webview.dart';
+import 'package:smartlink_owner_flutter/ui/webview/webview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(const MaterialApp(
@@ -37,8 +37,8 @@ class _MyAppState extends State<MyApp> {
       if (res.data['status'] == true) {
         _saveToken(res.data['data']['token']);
         // ignore: use_build_context_synchronously
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const WebView()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const WebviewScreen()));
       } else {
         // ignore: avoid_print
         print(res.data['msg']);
