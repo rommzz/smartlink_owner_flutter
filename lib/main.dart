@@ -20,9 +20,17 @@ class _MyAppState extends State<MyApp> {
   String email = '';
   String password = '';
 
-  _saveToken(String token) async {
+  _saveToken(Map data) async {
     final prefs = await SharedPreferences.getInstance();
+    String token = data['token'];
+    String idowner = data['idowner'];
+    var rawUrl =
+        'http://192.168.1.7:8080?token=$token&email=$email&idowner=$idowner';
+    String url = rawUrl.toString();
     await prefs.setString('token', token);
+    await prefs.setString('email', email);
+    await prefs.setString('idowner', idowner);
+    await prefs.setString('url', url);
   }
 
   _submit() async {
@@ -32,10 +40,11 @@ class _MyAppState extends State<MyApp> {
         'email': email,
         'password': password,
       });
-      Response res = await dio
-          .post('https://owner-api.smartlink.id/auth/byemailsign', data: data);
+      Response res = await dio.post(
+          'https://smartlink-owner-0-gateway-fljnd6wana-de.a.run.app/auth/byemailsign',
+          data: data);
       if (res.data['status'] == true) {
-        _saveToken(res.data['data']['token']);
+        _saveToken(res.data['data']);
         // ignore: use_build_context_synchronously
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const WebviewScreen()));
