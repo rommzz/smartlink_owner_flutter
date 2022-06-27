@@ -11,21 +11,27 @@ class WebviewScreen extends StatefulWidget {
 }
 
 class _WebviewScreenState extends State<WebviewScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   late WebViewXController webviewController;
+  String baseUrl = '';
   String token = '';
   String email = '';
   String idowner = '';
   String url = '';
 
-  _setInitialUrl() async {
+  Future<String> _setInitialUrl() async {
     final prefs = await SharedPreferences.getInstance();
     token = prefs.getString('token')!;
     email = prefs.getString('email')!;
     idowner = prefs.getString('idowner')!;
-    var rawUrl =
-        'http://192.168.1.7:8080?token=$token&email=$email&idowner=$idowner';
-    url = rawUrl.toString();
-    print(url);
+    baseUrl = prefs.getString('baseUrl')!;
+    var rawUrl = '$baseUrl?token=$token&email=$email&idowner=$idowner';
+    return rawUrl.toString();
+  }
+
+  _goTo(String content) {
+    webviewController.loadContent(baseUrl + content, SourceType.url);
   }
 
   Size get screenSize => MediaQuery.of(context).size;
@@ -43,22 +49,75 @@ class _WebviewScreenState extends State<WebviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Karyawan',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settigs',
+          ),
+        ],
+        currentIndex: 0,
+        selectedItemColor: Colors.amber[800],
+        onTap: (int index) {
+          if (index == 0) {
+            _scaffoldKey.currentState?.openDrawer();
+          }
+          if (index == 1) {
+            _goTo('/karyawan');
+          }
+        },
+      ),
       body: Center(
-        child: _buildWebViewX(),
+        child: FutureBuilder<String>(
+          future: _setInitialUrl(),
+          builder: (context, snapshot) {
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
+
+            if (snapshot.hasData) {
+              return _buildWebViewX(snapshot.data ?? 'www.google.com');
+            }
+
+            return Container();
+          },
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: const <Widget> [
+            ExpansionTile(
+              
+              title: Text("Expansion Title"),
+              children: [
+                ListTile(title: Text('data1')),
+                ListTile(title: Text('data1'))
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildWebViewX() {
+  Widget _buildWebViewX(String initialUrl) {
     return WebViewX(
       key: const ValueKey('webviewx'),
-      initialContent:
-          'http://192.168.1.7:8080?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImRldkBnbWFpbC5jb20iLCJFeHBpcnlUcmlhbERhdGUiOiIyMDIwLTAyLTI5VDA4OjI1OjA4KzA3OjAwIiwiSWRPd25lciI6IlRIRU9ORSIsIktvdGEiOiIzNTczIiwiTmFtYSI6IlNoaWRxb24gQWxrYWFmIERldiIsIlJlYWRvbmx5IjoiZmFsc2UiLCJUZWxwIjoiNjI4NTcwODc4MDc2NiIsIlRpbWVMb2dpbiI6IjIwMjItMDYtMTdUMDA6MDc6MTQrMDc6MDAiLCJVbml4SWQiOiI2ODM5NWQwOS1kZWJiLTRlNDgtOWRhMS1kNzQyMzZlNWI5MTIifQ.xAwVR1spVpUiSkMji_0T3k7UGRGjdJm5l23VNH_aIeE&email=dev@gmail.com&idowner=THEONE',
+      initialContent: initialUrl,
       initialSourceType: SourceType.url,
       onWebViewCreated: (controller) => webviewController = controller,
       height: screenSize.height,
       width: screenSize.width,
-      onPageFinished: (src) => {print('finis $src')},
     );
   }
 }
