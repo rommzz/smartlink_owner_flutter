@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:smartlink_owner_flutter/ui/auth/login.dart';
+import 'package:smartlink_owner_flutter/ui/auth/startScreen.dart';
 import 'package:smartlink_owner_flutter/ui/webview/webview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,7 +10,7 @@ Future<void> main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var token = prefs.getString('token');
   print(token);
-  runApp(MaterialApp(home: token == null ? const LoginScreen() : const MyApp()));
+  runApp(MaterialApp(home: token == null ? const StartScreen() : const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
