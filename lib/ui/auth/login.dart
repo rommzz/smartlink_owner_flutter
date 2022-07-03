@@ -16,6 +16,22 @@ class _LoginScreenState extends State<LoginScreen> {
   String email = '';
   String password = '';
 
+  var loginIntro = RichText(
+    text: TextSpan(
+      style: new TextStyle(
+        fontSize: 14.0,
+        color: Colors.black,
+      ),
+      children: const <TextSpan>[
+        TextSpan(text: 'Silahkan masukkan '),
+        TextSpan(text: 'Email ', style: TextStyle(fontWeight: FontWeight.bold)),
+        TextSpan(text: 'dan '),
+        TextSpan(text: 'kata sandi ', style: TextStyle(fontWeight: FontWeight.bold)),
+        TextSpan(text: 'Anda untuk login.'),
+      ],
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,41 +39,100 @@ class _LoginScreenState extends State<LoginScreen> {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-        body: Column(
-          children: [
-            Center(
-              child: Column(children: [
-                Center(
-                  child: TextField(
-                    onChanged: ((String value) {
-                      email = value;
-                    }),
-                    decoration: const InputDecoration(
-                      label: Text('Email'),
-                      hintText: 'email@email.com',
+        body: Container(
+          alignment: Alignment.center,
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 560),
+            child: Column(children: [
+              Flexible(flex: 6, child: Column(
+                children: [
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      child: loginIntro),
+                  Center(
+                    child: Column(children: [
+                      const SizedBox(height: 10),
+                      Center(
+                        child: Column(
+                          children: [
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: const Text('Email'),
+                            ),
+                            TextField(
+                              onChanged: ((String value) {
+                                email = value;
+                              }),
+                              decoration: const InputDecoration(
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                                ),
+                                hintText: 'email@email.com',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Center(
+                          child: Column(
+                            children: [
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                child: const Text('Password'),
+                              ),
+                              TextField(
+                                onChanged: (String value) {
+                                  password = value;
+                                },
+                                obscureText: true,
+                                decoration: const InputDecoration(
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                                  ),
+                                  hintText: 'Kata Sandi',
+                                ),
+                              ),
+                            ],
+                          )
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
+                          alignment: Alignment.centerLeft,
+                          child: const Text('Lupa Kata Sandi?',
+                            style: TextStyle(
+                              color: Colors.blue,
+                            ),
+                          )
+                      ),
+                    ]),
+                  ),
+                ],
+              )),
+              Flexible(child: Column(
+                children: [
+                  const Text('Belum punya akun? Datar Smartlink'),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: (() => _submit()),
+                    child: Text('Submit'),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.blue,
+                        padding: const EdgeInsets.all(22),
+                        minimumSize: const Size.fromHeight(50)
                     ),
                   ),
-                ),
-                Center(
-                  child: TextField(
-                    onChanged: (String value) {
-                      password = value;
-                    },
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      label: Text('Password'),
-                      hintText: 'Kata Sandi',
-                    ),
-                  ),
-                ),
-              ]),
+                ],
+              ),),
+            ],
             ),
-            Center(
-                child: TextButton(
-              onPressed: (() => _submit()),
-              child: const Text('Submit'),
-            ))
-          ],
+          ),
         ),
       ),
     );

@@ -30,7 +30,6 @@ class StartScreen extends StatelessWidget {
                 ),
               ),
               Flexible(
-
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
