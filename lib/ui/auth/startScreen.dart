@@ -1,25 +1,24 @@
 
 import 'package:flutter/material.dart';
-import 'package:smartlink_owner_flutter/ui/auth/login.dart';
+import 'package:smartlink_owner_flutter/ui/auth/loginWrapper.dart';
+import 'package:smartlink_owner_flutter/utilities/theme_colors.dart';
 class StartScreen extends StatelessWidget {
   const StartScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: 
-      Scaffold(
-        body:
-        Container(
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
           padding: const EdgeInsets.all(22),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
-                flex: 6,
+              Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+                  children: const [
                     Center(
                       child: Text('Selamat datang di SmartOwner.'),
                     ),
@@ -29,35 +28,35 @@ class StartScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Flexible(
+              Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Center(
                       child: ElevatedButton(
                         onPressed: () {},
-                        child: Text('Daftar'),
                         style: ElevatedButton.styleFrom(
-                            primary: Colors.blue,
+                            primary: ThemeColors.primary,
                             padding: const EdgeInsets.all(22),
                             minimumSize: const Size.fromHeight(50)
                         ),
+                        child: const Text('Daftar'),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Center(
                       child: OutlinedButton(
                         onPressed: () {
                           Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => const LoginScreen()));
+                              MaterialPageRoute(builder: (context) => const LoginWrapper()));
                         },
-                        child: Text('Login'),
                         style: OutlinedButton.styleFrom(
-                            primary: Colors.blue,
+                            primary: ThemeColors.primary,
                             padding: const EdgeInsets.all(22),
-                            side: BorderSide(color: Colors.blue),
+                            side: BorderSide(color: ThemeColors.primary),
                             minimumSize: const Size.fromHeight(50)
                         ),
+                        child: const Text('Login'),
                       ),
                     )
                   ],
@@ -73,19 +72,19 @@ class StartScreen extends StatelessWidget {
               child: Center(
                 child: Column(
                   children: [
-                    Center(
-                      child: const Text('SmartOwner hadir dalam versi aplikasi untuk pengalaman yang lebih baik. Install sekarang!'),
+                    const Center(
+                      child: Text('SmartOwner hadir dalam versi aplikasi untuk pengalaman yang lebih baik. Install sekarang!'),
                     ),
                     const Padding(padding: EdgeInsets.all(5)),
                     Center(
                       child: ElevatedButton(
                         onPressed: () {  },
-                        child: Text('Download di Play Store'),
                         style: ElevatedButton.styleFrom(
                           primary: Colors.black,
                           padding: const EdgeInsets.all(22),
                           minimumSize: const Size.fromHeight(50)
                         ),
+                        child: const Text('Download di Play Store'),
                       ),
                     )
                   ],

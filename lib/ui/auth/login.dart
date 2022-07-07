@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smartlink_owner_flutter/components/SButton.dart';
 import 'package:smartlink_owner_flutter/ui/webview/webview.dart';
+import 'package:smartlink_owner_flutter/utilities/theme_colors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -34,11 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
+    return Scaffold(
         body: Container(
           alignment: Alignment.center,
           child: Container(
@@ -63,11 +61,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               onChanged: ((String value) {
                                 email = value;
                               }),
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                                  borderSide: BorderSide(color: ThemeColors.primary, width: 1.0),
                                 ),
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey, width: 1.0),
                                 ),
                                 hintText: 'email@email.com',
@@ -89,11 +87,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   password = value;
                                 },
                                 obscureText: true,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                                    borderSide: BorderSide(color: ThemeColors.primary, width: 1.0),
                                   ),
-                                  enabledBorder: OutlineInputBorder(
+                                  enabledBorder: const OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.grey, width: 1.0),
                                   ),
                                   hintText: 'Kata Sandi',
@@ -105,9 +103,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 10),
                       Container(
                           alignment: Alignment.centerLeft,
-                          child: const Text('Lupa Kata Sandi?',
+                          child: Text('Lupa Kata Sandi?',
                             style: TextStyle(
-                              color: Colors.blue,
+                              color: ThemeColors.primary,
                             ),
                           )
                       ),
@@ -119,23 +117,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const Text('Belum punya akun? Datar Smartlink'),
                   const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: (() => _submit()),
-                    child: Text('Submit'),
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.blue,
-                        padding: const EdgeInsets.all(22),
-                        minimumSize: const Size.fromHeight(50)
-                    ),
-                  ),
+                  SButton(text: 'Login')
                 ],
               ),),
             ],
             ),
           ),
         ),
-      ),
-    );
+      );
   }
   _submit() async {
     try {
